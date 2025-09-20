@@ -1,0 +1,23 @@
+# Environment configuration
+.env
+
+# Config files
+docker/php-fpm/xdebug/xdebug.ini
+docker/php-fpm/php-fpm/www.conf
+
+# JetBrains template
+.idea/
+
+# VsCode template
+.vscode/
+.prettierrc
+
+###> symfony/framework-bundle ###
+project/.env.local
+project/.env.local.php
+project/.env.*.local
+project/config/secrets/prod/prod.decrypt.private.php
+project/public/bundles/
+project/var/
+project/vendor/
+###< symfony/framework-bundle ###

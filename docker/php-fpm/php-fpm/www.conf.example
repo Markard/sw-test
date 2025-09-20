@@ -1,0 +1,28 @@
+[www]
+user = www-data
+group = www-data
+
+listen = 127.0.0.1:9000
+
+pm = dynamic
+pm.max_children = 5
+pm.start_servers = 2
+pm.min_spare_servers = 1
+pm.max_spare_servers = 3
+pm.process_idle_timeout = 60s;
+pm.max_requests = 500
+
+pm.status_path = /status
+pm.status_listen = 127.0.0.1:9001
+
+
+access.log = log/$pool.access.log
+access.format = "%R - %u %t \"%m %r%Q%q\" %s %f %{milli}d %{kilo}M %C%%"
+access.suppress_path[] = /ping
+access.suppress_path[] = /health_check.php
+
+slowlog = log/$pool.log.slow
+request_slowlog_timeout = 60s
+request_slowlog_trace_depth = 20
+
+request_terminate_timeout = 60s
