@@ -24,10 +24,5 @@ final class ServiceUrl
     private(set) string $url;
 
     #[ORM\Column(name: 'service', type: Types::STRING, unique: true, nullable: false, enumType: Service::class)]
-    private string $service;
-
-    public function getService(): Service
-    {
-        return Service::from($this->service);
-    }
+    private Service $service;
 }

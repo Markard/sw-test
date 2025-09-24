@@ -4,18 +4,61 @@ declare(strict_types=1);
 
 namespace App\Config\Http;
 
-use App\Config\Http\Input\Query;
+use App\Config\Http\Output\Output;
+use App\Config\UseCase\Provider;
+use App\Config\UseCase\SemVer;
+use App\Core\Entity\Platform;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpKernel\Attribute\MapQueryString;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
 use Symfony\Component\Routing\Attribute\Route;
 
 final class Controller extends AbstractController
 {
+    public function __construct(private readonly Provider $provider)
+    {
+    }
+
     #[Route('/config', methods: ['GET'])]
     public function getConfig(
-        #[MapQueryString] Query $query,
+        #[MapQueryParameter(
+            filter: FILTER_VALIDATE_REGEXP,
+            options: ['regexp' => '/^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$/'],
+            validationFailedStatusCode: Response::HTTP_BAD_REQUEST
+        )]
+        string $appVersion,
+        #[MapQueryParameter(
+            filter: FILTER_VALIDATE_REGEXP,
+            options: ['regexp' => '/^(android|ios)$/'],
+            validationFailedStatusCode: Response::HTTP_BAD_REQUEST
+        )]
+        string $platform,
+        #[MapQueryParameter(
+            filter: FILTER_VALIDATE_REGEXP,
+            options: ['regexp' => '/^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$/'],
+            validationFailedStatusCode: Response::HTTP_BAD_REQUEST
+        )]
+        ?string $assetsVersion = null,
+        #[MapQueryParameter(
+            filter: FILTER_VALIDATE_REGEXP,
+            options: ['regexp' => '/^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$/'],
+            validationFailedStatusCode: Response::HTTP_BAD_REQUEST
+        )]
+        ?string $definitionsVersion = null
     ): JsonResponse {
-        return new JsonResponse([123]);
+        $appVersion = new SemVer($appVersion);
+        $platform = Platform::from($platform);
+        $assetsVersion = $assetsVersion ? new SemVer($assetsVersion) : null;
+        $definitionsVersion = $definitionsVersion ? new SemVer($definitionsVersion) : null;
+
+        $configDto = $this->provider->getConfig(
+            appVersion: $appVersion,
+            platform: $platform,
+            assetsVersion: $assetsVersion,
+            definitionVersion: $definitionsVersion
+        );
+
+        return new JsonResponse(new Output($configDto));
     }
 }

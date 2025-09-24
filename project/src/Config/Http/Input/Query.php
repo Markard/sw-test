@@ -10,12 +10,13 @@ use Symfony\Component\Validator\Constraints as Assert;
 final class Query
 {
     public function __construct(
-        public $appVersion,
-        #[Assert\NotNull]
+        #[Assert\NotBlank]
+        public string $appVersion,
+        #[Assert\NotBlank]
         #[Assert\Choice(callback: [Platform::class, 'values'])]
-        public $platform,
+        public string $platform,
         public $assetsVersion,
-        public $definitionsVersion,
+        public string $definitionsVersion,
     ) {
     }
 }
