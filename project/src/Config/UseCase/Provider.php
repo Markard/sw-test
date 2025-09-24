@@ -11,7 +11,7 @@ use App\Core\Repository\AssetUrlRepository;
 use App\Core\Repository\DefinitionRepository;
 use App\Core\Repository\DefinitionUrlRepository;
 
-final readonly class Provider
+final readonly class Provider implements ProviderInterface
 {
     public function __construct(
         private ServiceUrlRepositoryInterface $serviceUrlRepo,

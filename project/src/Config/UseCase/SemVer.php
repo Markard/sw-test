@@ -17,4 +17,9 @@ final readonly class SemVer
         $this->minor = (int)$versions[1];
         $this->patch = (int)$versions[2];
     }
+
+    public function getAsString(): string
+    {
+        return implode('.', [$this->major, $this->minor, $this->patch]);
+    }
 }

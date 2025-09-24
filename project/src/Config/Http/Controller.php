@@ -6,6 +6,7 @@ namespace App\Config\Http;
 
 use App\Config\Http\Output\Output;
 use App\Config\UseCase\Provider;
+use App\Config\UseCase\ProviderInterface;
 use App\Config\UseCase\SemVer;
 use App\Core\Entity\Platform;
 use App\Core\Exception\NotFoundException;
@@ -18,7 +19,7 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class Controller extends AbstractController
 {
-    public function __construct(private readonly Provider $provider)
+    public function __construct(private readonly ProviderInterface $provider)
     {
     }
 
