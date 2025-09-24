@@ -23,7 +23,7 @@ final class Asset
 
     public function __construct(
         #[ORM\Column(name: 'platform', type: Types::STRING, nullable: false, enumType: Platform::class)]
-        private(set) readonly string $platform,
+        private(set) readonly Platform $platform,
         #[ORM\Column(name: 'major_version', type: Types::INTEGER, nullable: false)]
         private(set) readonly int $majorVersion,
         #[ORM\Column(name: 'minor_version', type: Types::INTEGER, nullable: false)]
@@ -33,5 +33,10 @@ final class Asset
         #[ORM\Column(name: 'hash', type: Types::STRING, nullable: false)]
         private(set) readonly string $hash,
     ) {
+    }
+
+    public function getVersionAsString(): string
+    {
+        return implode('.', [$this->majorVersion, $this->minorVersion, $this->patchVersion]);
     }
 }

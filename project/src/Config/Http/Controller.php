@@ -8,10 +8,12 @@ use App\Config\Http\Output\Output;
 use App\Config\UseCase\Provider;
 use App\Config\UseCase\SemVer;
 use App\Core\Entity\Platform;
+use App\Core\Exception\NotFoundException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Attribute\Route;
 
 final class Controller extends AbstractController
@@ -52,12 +54,16 @@ final class Controller extends AbstractController
         $assetsVersion = $assetsVersion ? new SemVer($assetsVersion) : null;
         $definitionsVersion = $definitionsVersion ? new SemVer($definitionsVersion) : null;
 
-        $configDto = $this->provider->getConfig(
-            appVersion: $appVersion,
-            platform: $platform,
-            assetsVersion: $assetsVersion,
-            definitionVersion: $definitionsVersion
-        );
+        try {
+            $configDto = $this->provider->getConfig(
+                appVersion: $appVersion,
+                platform: $platform,
+                assetsVersion: $assetsVersion,
+                definitionVersion: $definitionsVersion
+            );
+        } catch (NotFoundException $e) {
+            throw new NotFoundHttpException($e->getMessage(), $e);
+        }
 
         return new JsonResponse(new Output($configDto));
     }

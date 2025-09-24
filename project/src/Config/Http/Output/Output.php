@@ -13,7 +13,6 @@ final readonly class Output implements JsonSerializable
     {
     }
 
-
     public function jsonSerialize(): array
     {
         return [
@@ -22,6 +21,16 @@ final readonly class Output implements JsonSerializable
             ],
             'notifications' => [
                 'jsonrpc_url' => $this->config->notifications->url,
+            ],
+            'assets' => [
+                'version' => $this->config->assetDto->version,
+                'hash' => $this->config->assetDto->hash,
+                'urls' => $this->config->assetDto->urls,
+            ],
+            'definition' => [
+                'version' => $this->config->definitionDto->version,
+                'hash' => $this->config->definitionDto->hash,
+                'urls' => $this->config->definitionDto->urls,
             ],
         ];
     }
