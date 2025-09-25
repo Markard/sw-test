@@ -1,4 +1,3 @@
 ## Getting Started
-1.  `make build`
-2. 
-3. Open www.project.local in your browser.
+1. To install the application, run the following command in your terminal: `make build`
+2. After the build completes, you can make requests to the application at: http://localhost/config
