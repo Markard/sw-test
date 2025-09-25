@@ -4,6 +4,7 @@ build: ## Install project for development
 	cp project/.env.dev project/.env
 	make up
 	make composer-install
+	make migrate
 .PHONY: build
 
 fpm-ssh: ## Connect to containers via SSH
@@ -17,3 +18,12 @@ up: ## Start application
 down: ## Stop application
 	docker-compose down
 .PHONY: down
+
+DOCKER-APP-EXEC = docker-compose exec -it php-fpm /bin/sh -c
+composer-install: ## Install composer dependencies
+	$(DOCKER-APP-EXEC) 'composer install'
+.PHONY: composer-install
+
+migrate: ## Install composer dependencies
+	$(DOCKER-APP-EXEC) 'bin/console doctrine:migration:migrate --no-interaction'
+.PHONY: composer-install
