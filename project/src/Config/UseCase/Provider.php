@@ -10,11 +10,12 @@ use App\Core\Repository\AssetRepository;
 use App\Core\Repository\AssetUrlRepository;
 use App\Core\Repository\DefinitionRepository;
 use App\Core\Repository\DefinitionUrlRepository;
+use App\Core\Repository\ServiceUrlRepository;
 
 final readonly class Provider implements ProviderInterface
 {
     public function __construct(
-        private ServiceUrlRepositoryInterface $serviceUrlRepo,
+        private ServiceUrlRepository $serviceUrlRepo,
         private AssetRepository $assetRepo,
         private DefinitionRepository $definitionRepo,
         private AssetUrlRepository $assetUrlRepo,
